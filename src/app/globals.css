@@ -1,26 +1,96 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
+/* Colors are CSS variables so light and dark mode share the same class names:
+   bg-bg, bg-surface, text-fg, text-muted, border-line, text-accent, bg-accent ... */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --fg: #0f172a;
+  --muted: #5b6b82;
+  --line: #e2e8f0;
+  --accent: #4f46e5;
+  --accent-fg: #ffffff;
+  --accent-soft: #eef2ff;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg: #0b1020;
+    --surface: #121a2e;
+    --fg: #e8edf7;
+    --muted: #9aa8bf;
+    --line: #232f4b;
+    --accent: #8b93ff;
+    --accent-fg: #0b1020;
+    --accent-soft: #1c2444;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: light dark;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-bg text-fg font-sans;
+  }
+  :focus-visible {
+    @apply outline-accent outline-2 outline-offset-2;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+  .card {
+    @apply border-line bg-surface rounded-2xl border;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply bg-accent text-accent-fg hover:opacity-90;
+  }
+  .btn-secondary {
+    @apply border-line text-fg hover:bg-surface border;
+  }
+  .chip {
+    @apply bg-accent-soft text-accent inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+  .input {
+    @apply border-line bg-bg text-fg focus:border-accent block w-full rounded-lg border px-3 py-2.5 text-sm focus:outline-none;
+  }
+
+  /* Markdown content (blog posts, project case studies, bio) */
+  .prose {
+    @apply space-y-4 leading-relaxed break-words;
+  }
+  .prose h1 { @apply mt-8 text-3xl font-bold; }
+  .prose h2 { @apply mt-8 text-2xl font-semibold; }
+  .prose h3 { @apply mt-6 text-xl font-semibold; }
+  .prose a { @apply text-accent underline underline-offset-2; }
+  .prose ul { @apply list-disc space-y-1 pl-6; }
+  .prose ol { @apply list-decimal space-y-1 pl-6; }
+  .prose code { @apply bg-surface border-line rounded border px-1 py-0.5 font-mono text-[0.85em]; }
+  .prose pre { @apply overflow-x-auto rounded-xl bg-slate-900 p-4 text-sm text-slate-100; }
+  .prose pre code { @apply border-0 bg-transparent p-0 text-slate-100; }
+  .prose blockquote { @apply border-line text-muted border-l-4 pl-4 italic; }
+  .prose img { @apply max-w-full rounded-xl; }
+  .prose hr { @apply border-line; }
+  .prose table { @apply block w-full overflow-x-auto text-sm; }
+  .prose th, .prose td { @apply border-line border px-3 py-2 text-left; }
 }
